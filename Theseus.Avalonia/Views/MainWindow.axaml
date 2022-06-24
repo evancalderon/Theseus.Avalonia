@@ -25,12 +25,13 @@
             Classes="Background1"
             IsHitTestVisible="False">
             <DockPanel>
-                <DockPanel
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
                     DockPanel.Dock="Top"
                     Height="48"
                     IsHitTestVisible="False">
                     <StackPanel
-                        DockPanel.Dock="Left"
                         Orientation="Horizontal"
                         Margin="12 0"
                         Spacing="12">
@@ -73,7 +74,7 @@
                         <Path Data="l0,0 4,4 4,-4" StrokeThickness="1" Stroke="White" Margin="4 0"
                               VerticalAlignment="Center" />
                     </StackPanel>
-                </DockPanel>
+                </StackPanel>
                 <Rectangle DockPanel.Dock="Top" Fill="DarkGray" Height="1" />
 
                 <ExperimentalAcrylicBorder
