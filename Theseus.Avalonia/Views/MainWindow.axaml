@@ -1,0 +1,113 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Theseus.Avalonia.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="Theseus.Avalonia.Views.MainWindow"
+    Icon="/Assets/avalonia-logo.ico"
+    Title="Theseus.Avalonia"
+    TransparencyLevelHint="Mica"
+    Background="Transparent"
+    ExtendClientAreaToDecorationsHint="True"
+    Name="Window"
+    ExtendClientAreaTitleBarHeightHint="48"
+    MinWidth="932"
+    MinHeight="200">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Panel>
+        <ExperimentalAcrylicBorder
+            Classes="Background1"
+            IsHitTestVisible="False">
+            <DockPanel>
+                <DockPanel
+                    DockPanel.Dock="Top"
+                    Height="48"
+                    IsHitTestVisible="False">
+                    <StackPanel
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        Margin="12 0"
+                        Spacing="12">
+                        <TextBlock
+                            Classes="Logo"
+                            Margin="12 0"
+                            VerticalAlignment="Center"
+                            Text="modrinth"
+                            FontFamily="Assets/Fonts/MontserratAlternates-SemiBold.ttf"
+                            FontSize="24"
+                            Foreground="White" />
+                        <Grid>
+                            <TextBlock
+                                Classes="Title"
+                                Text="Play"
+                                VerticalAlignment="Center" />
+                            <Border
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Stretch"
+                                Height="4"
+                                CornerRadius="2"
+                                Background="#1bd96a"
+                                Margin="0 0 0 6"
+                                Width="16" />
+                        </Grid>
+                        <TextBlock
+                            Classes="Title"
+                            Text="Modpacks"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            Classes="Title"
+                            Text="Mods"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                        <Border Height="24" Width="24" Background="White" Margin="4 0" CornerRadius="12" />
+                        <Path Data="l0,0 4,4 4,-4" StrokeThickness="1" Stroke="White" Margin="4 0"
+                              VerticalAlignment="Center" />
+                    </StackPanel>
+                </DockPanel>
+                <Rectangle DockPanel.Dock="Top" Fill="DarkGray" Height="1" />
+
+                <ExperimentalAcrylicBorder
+                    Classes="Background1"
+                    VerticalAlignment="Stretch"
+                    Padding="12">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                        <Grid ColumnDefinitions="*,300,8,600,*" VerticalAlignment="Top">
+                            <ExperimentalAcrylicBorder
+                                Classes="Background2"
+                                Grid.Column="1"
+                                Padding="12"
+                                MinHeight="24"
+                                CornerRadius="16">
+                                <StackPanel>
+                                    <ExperimentalAcrylicBorder Classes="Background3" Height="24" CornerRadius="6">
+                                        <TextBlock Text="Search..." FontWeight="400" Margin="6 0"
+                                                   VerticalAlignment="Center" />
+                                    </ExperimentalAcrylicBorder>
+                                </StackPanel>
+                            </ExperimentalAcrylicBorder>
+                            <ExperimentalAcrylicBorder
+                                Classes="Background2"
+                                Grid.Column="3"
+                                Padding="12"
+                                MinHeight="24"
+                                CornerRadius="16">
+                                <StackPanel></StackPanel>
+                            </ExperimentalAcrylicBorder>
+                        </Grid>
+                    </ScrollViewer>
+                </ExperimentalAcrylicBorder>
+            </DockPanel>
+        </ExperimentalAcrylicBorder>
+    </Panel>
+
+</Window>
