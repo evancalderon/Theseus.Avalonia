@@ -13,8 +13,8 @@
     ExtendClientAreaToDecorationsHint="True"
     Name="Window"
     ExtendClientAreaTitleBarHeightHint="48"
-    MinWidth="932"
-    MinHeight="200">
+    MinWidth="932" Width="932"
+    MinHeight="200" Height="200">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -22,50 +22,58 @@
 
     <Panel>
         <ExperimentalAcrylicBorder
-            Classes="Background1"
-            IsHitTestVisible="False">
+            Classes="Background1">
             <DockPanel>
                 <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     DockPanel.Dock="Top"
-                    Height="48"
-                    IsHitTestVisible="False">
-                    <StackPanel
-                        Orientation="Horizontal"
+                    Height="48">
+                    <TextBlock
+                        Classes="Logo"
                         Margin="12 0"
-                        Spacing="12">
-                        <TextBlock
-                            Classes="Logo"
-                            Margin="12 0"
-                            VerticalAlignment="Center"
-                            Text="modrinth"
-                            FontFamily="Assets/Fonts/MontserratAlternates-SemiBold.ttf"
-                            FontSize="24"
-                            Foreground="White" />
-                        <Grid>
-                            <TextBlock
-                                Classes="Title"
-                                Text="Play"
-                                VerticalAlignment="Center" />
+                        VerticalAlignment="Center"
+                        Text="modrinth"
+                        FontFamily="Assets/Fonts/MontserratAlternates-SemiBold.ttf"
+                        FontSize="24"
+                        Foreground="White" />
+                    <Grid>
+                        <Canvas Name="Canvas" HorizontalAlignment="Stretch">
                             <Border
-                                VerticalAlignment="Bottom"
-                                HorizontalAlignment="Stretch"
+                                Name="TabPointer"
+                                Width="16"
                                 Height="4"
                                 CornerRadius="2"
                                 Background="#1bd96a"
-                                Margin="0 0 0 6"
-                                Width="16" />
-                        </Grid>
-                        <TextBlock
-                            Classes="Title"
-                            Text="Modpacks"
-                            VerticalAlignment="Center" />
-                        <TextBlock
-                            Classes="Title"
-                            Text="Mods"
-                            VerticalAlignment="Center" />
-                    </StackPanel>
+                                Canvas.Bottom="6" />
+                        </Canvas>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Margin="12 0">
+                            <StackPanel.Styles>
+                                <Style Selector="Border">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Padding" Value="6 0" />
+                                </Style>
+                                <Style Selector="Border:pointerover > TextBlock">
+                                    <Setter Property="Foreground" Value="White" />
+                                </Style>
+                                <Style Selector="TextBlock">
+                                    <Setter Property="FontWeight" Value="700" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </StackPanel.Styles>
+                            <Border Background="Transparent" PointerPressed="TabClick" Name="HomeTab">
+                                <TextBlock Text="Play" />
+                            </Border>
+                            <Border Background="Transparent" PointerPressed="TabClick">
+                                <TextBlock Text="Modpacks" />
+                            </Border>
+                            <Border Background="Transparent" PointerPressed="TabClick">
+                                <TextBlock Text="Mods" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
                     <StackPanel
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
