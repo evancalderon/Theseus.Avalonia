@@ -1,122 +1,99 @@
 <Window
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="using:Theseus.Avalonia.ViewModels"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    x:Class="Theseus.Avalonia.Views.MainWindow"
-    Icon="/Assets/avalonia-logo.ico"
-    Title="Theseus.Avalonia"
-    TransparencyLevelHint="Mica"
-    Background="Transparent"
-    ExtendClientAreaToDecorationsHint="True"
-    Name="Window"
-    ExtendClientAreaTitleBarHeightHint="48"
-    MinWidth="932" Width="932"
-    MinHeight="200" Height="200">
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="using:Theseus.Avalonia.ViewModels"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d"
+  x:Class="Theseus.Avalonia.Views.MainWindow"
+  Icon="/Assets/avalonia-logo.ico"
+  Title="Theseus.Avalonia"
+  TransparencyLevelHint="Mica"
+  Background="Transparent"
+  ExtendClientAreaToDecorationsHint="True"
+  Name="Window"
+  ExtendClientAreaTitleBarHeightHint="48"
+  MinWidth="932" Width="932"
+  MinHeight="200" Height="200">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
+  <Design.DataContext>
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
 
-    <Panel>
-        <ExperimentalAcrylicBorder
-            Classes="Background1">
-            <DockPanel>
-                <StackPanel
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    DockPanel.Dock="Top"
-                    Height="48">
-                    <TextBlock
-                        Classes="Logo"
-                        Margin="12 0"
-                        VerticalAlignment="Center"
-                        Text="modrinth"
-                        FontFamily="Assets/Fonts/MontserratAlternates-SemiBold.ttf"
-                        FontSize="24"
-                        Foreground="White" />
-                    <Grid>
-                        <Canvas Name="Canvas" HorizontalAlignment="Stretch">
-                            <Border
-                                Name="TabPointer"
-                                Width="16"
-                                Height="4"
-                                CornerRadius="2"
-                                Background="#1bd96a"
-                                Canvas.Bottom="6" />
-                        </Canvas>
-                        <StackPanel
-                            Orientation="Horizontal"
-                            Margin="12 0">
-                            <StackPanel.Styles>
-                                <Style Selector="Border">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="Padding" Value="6 0" />
-                                </Style>
-                                <Style Selector="Border:pointerover > TextBlock">
-                                    <Setter Property="Foreground" Value="White" />
-                                </Style>
-                                <Style Selector="TextBlock">
-                                    <Setter Property="FontWeight" Value="700" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </StackPanel.Styles>
-                            <Border Background="Transparent" PointerPressed="TabClick" Name="HomeTab">
-                                <TextBlock Text="Play" />
-                            </Border>
-                            <Border Background="Transparent" PointerPressed="TabClick">
-                                <TextBlock Text="Modpacks" />
-                            </Border>
-                            <Border Background="Transparent" PointerPressed="TabClick">
-                                <TextBlock Text="Mods" />
-                            </Border>
-                        </StackPanel>
-                    </Grid>
-                    <StackPanel
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center">
-                        <Border Height="24" Width="24" Background="White" Margin="4 0" CornerRadius="12" />
-                        <Path Data="l0,0 4,4 4,-4" StrokeThickness="1" Stroke="White" Margin="4 0"
-                              VerticalAlignment="Center" />
-                    </StackPanel>
-                </StackPanel>
-                <Rectangle DockPanel.Dock="Top" Fill="DarkGray" Height="1" />
+  <Panel>
+    <ExperimentalAcrylicBorder
+      Classes="Background1"
+      IsHitTestVisible="False" />
+    <DockPanel>
+      <StackPanel
+        Orientation="Horizontal"
+        HorizontalAlignment="Center"
+        DockPanel.Dock="Top"
+        Height="48"
+        Spacing="16">
+        <TextBlock
+          Classes="Logo"
+          VerticalAlignment="Center"
+          Text="modrinth"
+          FontFamily="Assets/Fonts/MontserratAlternates-SemiBold.ttf"
+          FontSize="24"
+          Foreground="White" />
+        <StackPanel
+          Orientation="Horizontal"
+          VerticalAlignment="Center"
+          HorizontalAlignment="Center"
+          Spacing="4">
+          <Border Height="24" Width="24" Background="White" Margin="4 0" CornerRadius="12" />
+          <Path Data="l0,0 4,4 4,-4" StrokeThickness="1" Stroke="White"
+                VerticalAlignment="Center" />
+        </StackPanel>
+      </StackPanel>
+      <Rectangle DockPanel.Dock="Top" Fill="DarkGray" Height="1" />
 
-                <ExperimentalAcrylicBorder
-                    Classes="Background1"
-                    VerticalAlignment="Stretch"
-                    Padding="12">
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                        <Grid ColumnDefinitions="*,300,8,600,*" VerticalAlignment="Top">
-                            <ExperimentalAcrylicBorder
-                                Classes="Background2"
-                                Grid.Column="1"
-                                Padding="12"
-                                MinHeight="24"
-                                CornerRadius="16">
-                                <StackPanel>
-                                    <ExperimentalAcrylicBorder Classes="Background3" Height="24" CornerRadius="6">
-                                        <TextBlock Text="Search..." FontWeight="400" Margin="6 0"
-                                                   VerticalAlignment="Center" />
-                                    </ExperimentalAcrylicBorder>
-                                </StackPanel>
-                            </ExperimentalAcrylicBorder>
-                            <ExperimentalAcrylicBorder
-                                Classes="Background2"
-                                Grid.Column="3"
-                                Padding="12"
-                                MinHeight="24"
-                                CornerRadius="16">
-                                <StackPanel></StackPanel>
-                            </ExperimentalAcrylicBorder>
-                        </Grid>
-                    </ScrollViewer>
+      <ExperimentalAcrylicBorder
+        Classes="Background1"
+        VerticalAlignment="Stretch"
+        Padding="12">
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+          <Grid ColumnDefinitions="*,300,8,600,*" VerticalAlignment="Top">
+            <ExperimentalAcrylicBorder
+              Classes="Background2"
+              Grid.Column="1"
+              Padding="12"
+              MinHeight="24"
+              CornerRadius="16">
+              <StackPanel>
+                <ExperimentalAcrylicBorder Name="SearchBorder" Classes="Background3" CornerRadius="6">
+                  <ExperimentalAcrylicBorder.Styles>
+                    <Style Selector="TextBox">
+                      <Setter Property="Background" Value="Transparent" />
+                      <Setter Property="BorderBrush" Value="Transparent" />
+                    </Style>
+                    <Style Selector="TextBox:pointerover /template/ Border">
+                      <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="TextBox:focus /template/ Border">
+                      <Setter Property="Background" Value="Transparent" />
+                      <Setter Property="BorderBrush" Value="White" />
+                    </Style>
+                  </ExperimentalAcrylicBorder.Styles>
+                  <TextBox Watermark="Search..." UseFloatingWatermark="False" FontWeight="400"
+                           VerticalAlignment="Center" CornerRadius="6" Classes="Test" />
                 </ExperimentalAcrylicBorder>
-            </DockPanel>
-        </ExperimentalAcrylicBorder>
-    </Panel>
+              </StackPanel>
+            </ExperimentalAcrylicBorder>
+            <ExperimentalAcrylicBorder
+              Classes="Background2"
+              Grid.Column="3"
+              Padding="12"
+              MinHeight="24"
+              CornerRadius="16">
+              <StackPanel></StackPanel>
+            </ExperimentalAcrylicBorder>
+          </Grid>
+        </ScrollViewer>
+      </ExperimentalAcrylicBorder>
+    </DockPanel>
+  </Panel>
 
 </Window>
