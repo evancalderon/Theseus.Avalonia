@@ -4,7 +4,6 @@
   xmlns:vm="using:Theseus.Avalonia.ViewModels"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:views="clr-namespace:Theseus.Avalonia.Views"
   mc:Ignorable="d"
   x:Class="Theseus.Avalonia.Views.MainWindow"
   Icon="/Assets/avalonia-logo.ico"
@@ -15,7 +14,7 @@
   Name="Window"
   ExtendClientAreaTitleBarHeightHint="48"
   MinWidth="932" Width="932"
-  MinHeight="240" Height="400" d:DesignHeight="200">
+  MinHeight="240" Height="500" d:DesignHeight="300">
 
   <Design.DataContext>
     <vm:MainWindowViewModel />
@@ -44,9 +43,9 @@
           VerticalAlignment="Center"
           HorizontalAlignment="Center"
           Spacing="4">
-          <Border Height="24" Width="24" Background="White" Margin="4 0" CornerRadius="12" />
+          <Border Height="24" Width="24" Background="White" Margin="4" CornerRadius="12" />
           <Path Data="l0,0 4,4 4,-4" StrokeThickness="2" Stroke="White"
-                VerticalAlignment="Center" Width="0" />
+                VerticalAlignment="Center" Width="8" Height="4" />
         </StackPanel>
       </StackPanel>
       <Rectangle DockPanel.Dock="Top" Fill="DarkGray" Height="1" />
@@ -55,97 +54,92 @@
       <ExperimentalAcrylicBorder
         Classes="Background1"
         VerticalAlignment="Stretch" Focusable="True">
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-          <Grid ColumnDefinitions="*,Auto,600,*" VerticalAlignment="Top" Margin="12">
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Padding="12">
+          <Grid ColumnDefinitions="*,600,*" RowDefinitions="Auto,*" VerticalAlignment="Top">
 
-            <!--Left side-->
-            <Border Grid.Column="1" Padding="0 0 8 0" Width="0" Name="LeftContainer"
-                    ClipToBounds="True">
-              <ExperimentalAcrylicBorder Name="SearchContainer"
-                                         Classes="Background2" CornerRadius="16" Padding="8"
-                                         VerticalAlignment="Top" HorizontalAlignment="Left" Width="300">
-                <StackPanel Spacing="12">
-                  <ExperimentalAcrylicBorder Name="SearchBorder" Classes="Background3" CornerRadius="8">
-                    <ExperimentalAcrylicBorder.Styles>
-                      <Style Selector="TextBox">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                      </Style>
-                      <Style Selector="TextBox /template/ TextBlock">
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="FontSize" Value="16" />
-                      </Style>
-                      <Style Selector="TextBox:pointerover /template/ TextBlock">
-                        <Setter Property="Foreground" Value="White"></Setter>
-                      </Style>
-                      <Style Selector="TextBox:focus /template/ TextBlock">
-                        <Setter Property="Foreground" Value="White" />
-                      </Style>
-                      <Style Selector="TextBox:pointerover /template/ Border">
-                        <Setter Property="Background" Value="Transparent" />
-                      </Style>
-                      <Style Selector="TextBox:focus /template/ Border">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderBrush" Value="White" />
-                      </Style>
-                    </ExperimentalAcrylicBorder.Styles>
-                    <Grid>
-                      <Path Data="l0,0 l4,-4 a3,3 0 1,0 6,-6 a 3,3 0 1,0 -6,6"
-                            StrokeThickness="2" Stroke="White" Opacity="0.5"
-                            VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 12 12 0"
-                            IsVisible="{Binding #SearchBox.Text,Converter={x:Static StringConverters.IsNullOrEmpty}}" />
-                      <TextBox Watermark="Search..." FontWeight="900" FontSize="16" Name="SearchBox"
-                               VerticalAlignment="Center" CornerRadius="6" FontFamily="/Assets/Fonts/Inter.ttf#Inter" />
-                    </Grid>
-                  </ExperimentalAcrylicBorder>
-                  <ItemsControl Items="{Binding modpacks}">
-                    <ItemsControl.DataTemplates>
-                      <DataTemplate DataType="{x:Type vm:Modpack}">
-                        <TextBlock Text="{Binding name}" TextTrimming="CharacterEllipsis" />
-                      </DataTemplate>
-                    </ItemsControl.DataTemplates>
-                    <ItemsControl.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <StackPanel Spacing="4" />
-                      </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                  </ItemsControl>
-                </StackPanel>
+            <Canvas Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" ZIndex="1">
+              <ExperimentalAcrylicBorder
+                Name="SearchOverlay" Classes="Background2" Width="600" Padding="8" IsVisible="False"
+                CornerRadius="16" Canvas.Left="{Binding #SearchBorder.Bounds.Left}">
+                <TextBox Classes="Ex" Watermark="Search..." Name="SearchBox" LostFocus="HideRealSearch" />
+              </ExperimentalAcrylicBorder>
+            </Canvas>
+
+            <!--Search box-->
+            <Border
+              Grid.Row="0" Grid.Column="1" Padding="0 0 0 8" Name="SearchBorder" ClipToBounds="True">
+              <Border.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Height" Duration="0:0:0.4" Easing="ExponentialEaseInOut" />
+                </Transitions>
+              </Border.Transitions>
+              <ExperimentalAcrylicBorder
+                Classes="Background2" Padding="8" CornerRadius="16"
+                VerticalAlignment="Top">
+                <TextBox
+                  Classes="Ex" Watermark="Search..." GotFocus="ShowRealSearch"
+                  CaretIndex="{Binding #SearchBox.CaretIndex,Mode=TwoWay}"
+                  Text="{Binding #SearchBox.Text,Mode=TwoWay}"
+                  SelectionStart="{Binding #SearchBox.SelectionStart,Mode=TwoWay}"
+                  SelectionEnd="{Binding #SearchBox.SelectionEnd,Mode=TwoWay}" />
               </ExperimentalAcrylicBorder>
             </Border>
+
+            <!--Search opener-->
+            <ExperimentalAcrylicBorder
+              Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+              Classes="Background2" Margin="8 0"
+              HorizontalAlignment="Right" VerticalAlignment="Top" Width="32" Height="32"
+              CornerRadius="16" Name="SearchOpener" Focusable="True"
+              PointerPressed="ToggleSearchBox">
+              <Path
+                Data="l0,0 4,-4 a3,3 0 0,1 6,-6 a3,3 0 0,1 -6,6" Stroke="White"
+                StrokeThickness="2"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"
+                Width="16" Height="16" />
+            </ExperimentalAcrylicBorder>
 
             <!--Right side-->
             <StackPanel
               Width="600"
               Classes="Background2"
-              Grid.Column="2"
+              Grid.Column="1" Grid.Row="1"
               MinHeight="24"
               Spacing="12">
+
               <!--News panel-->
               <ExperimentalAcrylicBorder
                 Classes="Background2"
                 MinHeight="200"
                 CornerRadius="16">
                 <Grid>
-                  <Path Data="l0,0 -4,4 4,4" Stroke="White" StrokeThickness="2" HorizontalAlignment="Left"
-                        VerticalAlignment="Center" Margin="8" Stretch="Uniform" Width="16" Height="16" />
+                  <Path
+                    Data="l0,0 -4,4 4,4" Stroke="White" StrokeThickness="2"
+                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                    Stretch="UniformToFill" Width="8" Height="16"
+                    Margin="8" />
                   <TextBlock HorizontalAlignment="Center">Modrinth News</TextBlock>
-                  <Path Data="l0,0 4,4 -4,4" Stroke="White" StrokeThickness="2" HorizontalAlignment="Right"
-                        VerticalAlignment="Center" Stretch="Uniform" Width="16" Height="16" />
+                  <Path Data="l0,0 4,4 -4,4" Stroke="White" StrokeThickness="2"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Stretch="UniformToFill" Width="8" Height="16"
+                        Margin="8" />
                 </Grid>
               </ExperimentalAcrylicBorder>
 
               <!--Shelves-->
-              <TextBlock Text="+ Add Shelf" Margin="16 0 0 -8" />
+              <TextBlock Text="+ Add Shelf" Margin="16 0 0 -8"
+                         Cursor="Hand" />
               <ExperimentalAcrylicBorder Classes="Background2" CornerRadius="16" Padding="4">
                 <StackPanel>
-                  <TextBlock Text="All Modpacks" Margin="16 12" />
+                  <TextBlock Text="All Modpacks" Margin="16 8 16 0" />
                   <ItemsControl Items="{Binding modpacks}" HorizontalAlignment="Center">
                     <ItemsControl.DataTemplates>
                       <DataTemplate DataType="{x:Type vm:Modpack}">
-                        <Border Width="128" Height="128" Margin="8" Background="{Binding color}"
+                        <Border Width="128" Height="128" Margin="8"
+                                Background="{Binding color}"
                                 CornerRadius="8">
-                          <TextBlock Text="{Binding name}" Foreground="Black" HorizontalAlignment="Center"
+                          <TextBlock Text="{Binding name}" Foreground="Black"
+                                     HorizontalAlignment="Center"
                                      TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
                         </Border>
                       </DataTemplate>

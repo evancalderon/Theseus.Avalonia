@@ -2,66 +2,132 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:Theseus.Avalonia"
              x:Class="Theseus.Avalonia.App">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-    
-    <Application.Resources>
-        <ExperimentalAcrylicMaterial
-            x:Key="Background1"
-            BackgroundSource="Digger"
-            FallbackColor="#16181c"
-            TintColor="#000000"
-            TintOpacity="1"
-            MaterialOpacity="0.1" />
-        
-        <ExperimentalAcrylicMaterial
-            x:Key="Background2"
-            BackgroundSource="Digger"
-            FallbackColor="#26292f"
-            TintColor="#161616"
-            TintOpacity="1"
-            MaterialOpacity="0.1" />
-        
-        <ExperimentalAcrylicMaterial
-            x:Key="Background3"
-            BackgroundSource="Digger"
-            FallbackColor="#3e434b"
-            TintColor="#2f2f2f"
-            TintOpacity="1"
-            MaterialOpacity="0.1" />
-    </Application.Resources>
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
 
-    <Application.Styles>
-        <FluentTheme Mode="Dark"/>
-        
-        <Style Selector="ExperimentalAcrylicBorder.Background1">
-            <Setter Property="Material" Value="{DynamicResource Background1}" />
-        </Style>
-        
-        <Style Selector="ExperimentalAcrylicBorder.Background2">
-            <Setter Property="Material" Value="{DynamicResource Background2}" />
-        </Style>
-        
-        <Style Selector="ExperimentalAcrylicBorder.Background3">
-            <Setter Property="Material" Value="{DynamicResource Background3}" />
-        </Style>
-        
-        <Style Selector="TextBlock">
-            <Setter Property="FontFamily" Value="/Assets/Fonts/Inter.ttf#Inter" />
-            <Setter Property="FontWeight" Value="700" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Foreground" Value="#e0e0e0" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-        
-        <Style Selector="TextBlock.Title">
-            <Setter Property="FontWeight" Value="900" />
-        </Style>
-        
-        <Style Selector="TextBlock.Logo">
-            <Setter Property="FontFamily" Value="/Assets/Fonts/MontserratAlternates-SemiBold.ttf#" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-        </Style>
-    </Application.Styles>
+  <Application.Resources>
+    <ExperimentalAcrylicMaterial
+      x:Key="Background1"
+      BackgroundSource="Digger"
+      FallbackColor="#16181c"
+      TintColor="#000000"
+      TintOpacity="1"
+      MaterialOpacity="0.1" />
+
+    <ExperimentalAcrylicMaterial
+      x:Key="Background2"
+      BackgroundSource="Digger"
+      FallbackColor="#26292f"
+      TintColor="#161616"
+      TintOpacity="1"
+      MaterialOpacity="0.1" />
+
+    <ExperimentalAcrylicMaterial
+      x:Key="Background3"
+      BackgroundSource="Digger"
+      FallbackColor="#3e434b"
+      TintColor="#2f2f2f"
+      TintOpacity="1"
+      MaterialOpacity="0.1" />
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme Mode="Dark" />
+
+    <Style Selector="ExperimentalAcrylicBorder.Background1">
+      <Setter Property="Material" Value="{DynamicResource Background1}" />
+    </Style>
+
+    <Style Selector="ExperimentalAcrylicBorder.Background2">
+      <Setter Property="Material" Value="{DynamicResource Background2}" />
+    </Style>
+
+    <Style Selector="ExperimentalAcrylicBorder.Background3">
+      <Setter Property="Material" Value="{DynamicResource Background3}" />
+    </Style>
+
+    <Style Selector="TextBlock">
+      <Setter Property="FontFamily" Value="/Assets/Fonts/Inter.ttf#Inter" />
+      <Setter Property="FontWeight" Value="500" />
+      <Setter Property="FontSize" Value="16" />
+      <Setter Property="Foreground" Value="#e0e0e0" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="TextBlock.Title">
+      <Setter Property="FontWeight" Value="900" />
+    </Style>
+
+    <Style Selector="TextBlock.Logo">
+      <Setter Property="FontFamily" Value="/Assets/Fonts/MontserratAlternates-SemiBold.ttf#" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="TextBox.Ex">
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="BorderBrush" Value="White" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="FontFamily" Value="/Assets/Fonts/Inter.ttf#Inter" />
+      <Setter Property="Cursor" Value="IBeam" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="8" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Grid>
+            <ExperimentalAcrylicBorder 
+              Classes="Background3"
+              CornerRadius="{TemplateBinding CornerRadius}">
+              <Grid>
+                <Border
+                  Background="Transparent"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}" />
+                <TextBlock
+                  Text="{TemplateBinding Watermark}" Opacity="0.5"
+                  Foreground="{TemplateBinding Foreground}"
+                  FontFamily="{TemplateBinding FontFamily}"
+                  FontWeight="{TemplateBinding FontWeight}"
+                  FontSize="{TemplateBinding FontSize}"
+                  FontStyle="{TemplateBinding FontStyle}"
+                  Margin="{TemplateBinding Padding}"
+                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                <TextPresenter
+                  Name="PART_TextPresenter"
+                  Text="{TemplateBinding Text}"
+                  Background="Transparent"
+                  CaretBrush="{TemplateBinding CaretBrush}"
+                  CaretIndex="{TemplateBinding CaretIndex}"
+                  SelectionStart="{TemplateBinding SelectionStart}"
+                  SelectionEnd="{TemplateBinding SelectionEnd}"
+                  SelectionBrush="{TemplateBinding SelectionBrush}"
+                  Margin="{TemplateBinding Padding}"
+                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  TextBlock.Foreground="{TemplateBinding Foreground}"
+                  TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                  TextBlock.FontWeight="{TemplateBinding FontWeight}"
+                  TextBlock.FontSize="{TemplateBinding FontSize}"
+                  TextBlock.FontStyle="{TemplateBinding FontStyle}" />
+              </Grid>
+            </ExperimentalAcrylicBorder>
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+    <Style Selector="TextBox.Ex:not(:empty) /template/ TextBlock">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBox.Ex:pointerover">
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="TextBox.Ex:focus">
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+  </Application.Styles>
 </Application>
