@@ -42,6 +42,23 @@ namespace Theseus.Avalonia.ViewModels
                     color = new SolidColorBrush(new Color(0xff, buffer[0], buffer[1], buffer[2])),
                 });
             }
+
+            {
+                var buffer = new byte[3];
+                new Random().NextBytes(buffer);
+                for (var j = 0; j < buffer.Length; j++)
+                {
+                    buffer[j] = (byte) (buffer[j] * 3 / 8 + 255 * 5 / 8);
+                }
+                    
+                modpacks.Add(new Modpack
+                {
+                    slug = new string(Enumerable.Repeat(alphabet, 8).Select(s => s[random.Next(s.Length)]).ToArray()),
+                    name = "Example with a really long name that's honestly a little too long for this menu and stuff like that",
+                    desc = "Modpack Description",
+                    color = new SolidColorBrush(new Color(0xff, buffer[0], buffer[1], buffer[2])),
+                });
+            }
         }
     }
 }
