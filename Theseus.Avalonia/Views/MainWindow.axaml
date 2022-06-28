@@ -54,15 +54,48 @@
       <ExperimentalAcrylicBorder
         Classes="Background1"
         VerticalAlignment="Stretch" Focusable="True">
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Padding="12">
-          <Grid ColumnDefinitions="*,600,*" RowDefinitions="Auto,*" VerticalAlignment="Top">
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+          <Grid ColumnDefinitions="*,600,*" RowDefinitions="Auto,*" VerticalAlignment="Top" Margin="12">
 
             <Canvas Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" ZIndex="1">
-              <ExperimentalAcrylicBorder
-                Name="SearchOverlay" Classes="Background2" Width="600" Padding="8" IsVisible="False"
-                CornerRadius="16" Canvas.Left="{Binding #SearchBorder.Bounds.Left}">
-                <TextBox Classes="Ex" Watermark="Search..." Name="SearchBox" LostFocus="HideRealSearch" />
-              </ExperimentalAcrylicBorder>
+              <Canvas.Styles>
+                <Style Selector="Border#SearchOverlay">
+                  <Setter Property="IsVisible" Value="False" />
+                </Style>
+                <Style Selector="Border#SearchOverlay:focus-within">
+                  <Setter Property="IsVisible" Value="True" />
+                </Style>
+              </Canvas.Styles>
+              <Border BoxShadow="0 0 8 0 black"
+                      Name="SearchOverlay" Width="600"
+                      CornerRadius="16" Canvas.Left="{Binding #SearchBorder.Bounds.Left}">
+                <ExperimentalAcrylicBorder Classes="Background2" CornerRadius="16" Padding="8" Focusable="True">
+                  <StackPanel>
+                    <TextBox
+                      Classes="Ex" Watermark="Search..." Name="SearchBox" LostFocus="HideRealSearch"
+                      CaretIndex="{Binding #FakeSearchBox.CaretIndex,Mode=OneWayToSource}"
+                      Text="{Binding #FakeSearchBox.Text,Mode=OneWayToSource}"
+                      SelectionStart="{Binding #FakeSearchBox.SelectionStart,Mode=OneWayToSource}"
+                      SelectionEnd="{Binding #FakeSearchBox.SelectionEnd,Mode=OneWayToSource}" />
+                    <ScrollViewer MaxHeight="300" Margin="0 12 0 0" VerticalScrollBarVisibility="Auto"
+                                  IsVisible="{Binding #SearchResults.ItemCount}"
+                                  CornerRadius="8">
+                      <ItemsControl Items="{Binding SearchResult}" Name="SearchResults">
+                        <ItemsControl.DataTemplates>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                          </DataTemplate>
+                        </ItemsControl.DataTemplates>
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <StackPanel Spacing="6" />
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                      </ItemsControl>
+                    </ScrollViewer>
+                  </StackPanel>
+                </ExperimentalAcrylicBorder>
+              </Border>
             </Canvas>
 
             <!--fake search box-->
@@ -77,11 +110,8 @@
                 Classes="Background2" Padding="8" CornerRadius="16"
                 VerticalAlignment="Top">
                 <TextBox
-                  Classes="Ex" Watermark="Search..." GotFocus="ShowRealSearch"
-                  CaretIndex="{Binding #SearchBox.CaretIndex,Mode=TwoWay}"
-                  Text="{Binding #SearchBox.Text,Mode=TwoWay}"
-                  SelectionStart="{Binding #SearchBox.SelectionStart,Mode=TwoWay}"
-                  SelectionEnd="{Binding #SearchBox.SelectionEnd,Mode=TwoWay}" />
+                  Name="FakeSearchBox"
+                  Classes="Ex" Watermark="Search..." GotFocus="ShowRealSearch" />
               </ExperimentalAcrylicBorder>
             </Border>
 
@@ -132,13 +162,13 @@
               <ExperimentalAcrylicBorder Classes="Background2" CornerRadius="16" Padding="4">
                 <StackPanel>
                   <TextBlock Text="All Modpacks" Margin="16 8 16 0" />
-                  <ItemsControl Items="{Binding modpacks}" HorizontalAlignment="Center">
+                  <ItemsControl Items="{Binding Modpacks}" HorizontalAlignment="Center">
                     <ItemsControl.DataTemplates>
                       <DataTemplate DataType="{x:Type vm:Modpack}">
                         <Border Width="128" Height="128" Margin="8"
-                                Background="{Binding color}"
+                                Background="{Binding Color}"
                                 CornerRadius="8">
-                          <TextBlock Text="{Binding name}" Foreground="Black"
+                          <TextBlock Text="{Binding Name}" Foreground="Black"
                                      HorizontalAlignment="Center"
                                      TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
                         </Border>

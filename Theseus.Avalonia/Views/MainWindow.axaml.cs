@@ -17,21 +17,19 @@ namespace Theseus.Avalonia.Views
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         private double _searchBorderHeight = 0;
-        
+
         public MainWindow()
         {
             InitializeComponent();
-            this.WhenActivated(disposable =>
-            {
-            });
-            
+            this.WhenActivated(disposable => { });
+
             Opened += delegate
             {
                 _searchBorderHeight = SearchBorder.Bounds.Height;
-                
+
                 SearchBox.PropertyChanged += SearchBoxOnPropertyChanged;
-                
-                ((ExperimentalAcrylicBorder)SearchBox.GetLogicalParent()).Height = _searchBorderHeight - 8;
+
+                //((ExperimentalAcrylicBorder)SearchBox.GetLogicalParent()).Height = _searchBorderHeight - 8;
                 if (Design.IsDesignMode)
                     return;
                 SearchBorder.Height = 0;
@@ -46,7 +44,8 @@ namespace Theseus.Avalonia.Views
         {
             if (e.Property.Name == "Text")
             {
-                Console.WriteLine(e.NewValue);
+                Console.WriteLine();
+                ViewModel?.DoSearch(SearchBox.Text);
             }
         }
 
@@ -60,13 +59,13 @@ namespace Theseus.Avalonia.Views
 
         private void ShowRealSearch(object? sender, GotFocusEventArgs e)
         {
-            SearchOverlay.IsVisible = true;
+            //SearchOverlay.IsVisible = true;
             SearchBox.Focus();
         }
 
         private void HideRealSearch(object? sender, RoutedEventArgs e)
         {
-            SearchOverlay.IsVisible = false;
+            //SearchOverlay.IsVisible = false;
         }
     }
 }
