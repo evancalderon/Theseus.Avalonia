@@ -65,7 +65,7 @@
               </ExperimentalAcrylicBorder>
             </Canvas>
 
-            <!--Search box-->
+            <!--fake search box-->
             <Border
               Grid.Row="0" Grid.Column="1" Padding="0 0 0 8" Name="SearchBorder" ClipToBounds="True">
               <Border.Transitions>

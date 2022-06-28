@@ -31,9 +31,9 @@ namespace Theseus.Avalonia.Views
                 
                 SearchBox.PropertyChanged += SearchBoxOnPropertyChanged;
                 
+                ((ExperimentalAcrylicBorder)SearchBox.GetLogicalParent()).Height = _searchBorderHeight - 8;
                 if (Design.IsDesignMode)
                     return;
-                ((ExperimentalAcrylicBorder)SearchBox.GetLogicalParent()).Height = _searchBorderHeight - 8;
                 SearchBorder.Height = 0;
             };
 
