@@ -57,6 +57,7 @@
         <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
           <Grid ColumnDefinitions="*,600,*" RowDefinitions="Auto,*" VerticalAlignment="Top" Margin="12">
 
+            <!--Search overlay-->
             <Canvas Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" ZIndex="1">
               <Canvas.Styles>
                 <Style Selector="Border#SearchOverlay">
@@ -129,7 +130,7 @@
                 Width="16" Height="16" />
             </ExperimentalAcrylicBorder>
 
-            <!--Right side-->
+            <!--Center panel-->
             <StackPanel
               Width="600"
               Classes="Background2"
@@ -148,7 +149,7 @@
                     HorizontalAlignment="Left" VerticalAlignment="Center"
                     Stretch="UniformToFill" Width="8" Height="16"
                     Margin="8" />
-                  <TextBlock HorizontalAlignment="Center">Modrinth News</TextBlock>
+                  <TextBlock HorizontalAlignment="Center" Classes="Title">Modrinth News</TextBlock>
                   <Path Data="l0,0 4,4 -4,4" Stroke="White" StrokeThickness="2"
                         HorizontalAlignment="Right" VerticalAlignment="Center"
                         Stretch="UniformToFill" Width="8" Height="16"
@@ -161,7 +162,7 @@
                          Cursor="Hand" />
               <ExperimentalAcrylicBorder Classes="Background2" CornerRadius="16" Padding="4">
                 <StackPanel>
-                  <TextBlock Text="All Modpacks" Margin="16 8 16 0" />
+                  <TextBlock Text="All Modpacks" Margin="16 8 16 0" Classes="Title" />
                   <ItemsControl Items="{Binding Modpacks}" HorizontalAlignment="Center">
                     <ItemsControl.DataTemplates>
                       <DataTemplate DataType="{x:Type vm:Modpack}">

@@ -21,7 +21,7 @@ namespace Theseus.Avalonia.Views
         public MainWindow()
         {
             InitializeComponent();
-            this.WhenActivated(disposable => { });
+            this.WhenActivated(_ => { });
 
             Opened += delegate
             {
