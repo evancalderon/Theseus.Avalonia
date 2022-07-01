@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using ReactiveUI;
-using SkiaSharp;
 
 namespace Theseus.Avalonia.ViewModels
 {
     public class Modpack
     {
-        public string Slug { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; }
         public SolidColorBrush Color { get; set; }
@@ -39,45 +36,36 @@ namespace Theseus.Avalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _modpacks, value);
         }
 
-        public MainWindowViewModel()
+        public async Task LoadOnline()
         {
-            var alphabet = "1234567890qwertyuiopasdfghjklzxcvbnmPOIUYTREWQLKJHGFDSAMNBVCXZ";
+            var result = await Modrinth.SearchAsync(limit: 32, facets: new[] { "project_type:modpack" });
+            if (result == null)
+            {
+                Console.WriteLine("Failed to load modpacks");
+                return;
+            }
+
+            List<Modpack> modpacks = new();
             var random = new Random();
-            for (var i = 0; i < 30; i++)
+            foreach (var pack in result.hits)
             {
-                var buffer = new byte[3];
-                new Random().NextBytes(buffer);
-                for (var j = 0; j < buffer.Length; j++)
+                var color = new byte[3];
+                random.NextBytes(color);
+                for (var i = 0; i < color.Length; i++)
                 {
-                    buffer[j] = (byte)(buffer[j] * 3 / 8 + 255 * 5 / 8);
+                    color[i] = (byte)(color[i] * 3 / 8 + 255 * 5 / 8);
                 }
 
-                Modpacks.Add(new Modpack
+                modpacks.Add(new Modpack
                 {
-                    Slug = new string(Enumerable.Repeat(alphabet, 8).Select(s => s[random.Next(s.Length)]).ToArray()),
-                    Name = "Modpack",
-                    Desc = "Description",
-                    Color = new SolidColorBrush(new Color(0xff, buffer[0], buffer[1], buffer[2])),
+                    Name = pack.title,
+                    Desc = pack.description,
+                    Id = pack.project_id,
+                    Color = new SolidColorBrush(new Color(0xff, color[0], color[1], color[2]))
                 });
             }
 
-            {
-                var buffer = new byte[3];
-                new Random().NextBytes(buffer);
-                for (var j = 0; j < buffer.Length; j++)
-                {
-                    buffer[j] = (byte)(buffer[j] * 3 / 8 + 255 * 5 / 8);
-                }
-
-                Modpacks.Add(new Modpack
-                {
-                    Slug = new string(Enumerable.Repeat(alphabet, 8).Select(s => s[random.Next(s.Length)]).ToArray()),
-                    Name = "Example with a really long name that's honestly a little " +
-                           "too long for this menu and stuff like that",
-                    Desc = "Description",
-                    Color = new SolidColorBrush(new Color(0xff, buffer[0], buffer[1], buffer[2])),
-                });
-            }
+            Modpacks = modpacks;
         }
 
         public void DoSearch(string searchFor)
@@ -96,7 +84,7 @@ namespace Theseus.Avalonia.ViewModels
                 var namel = Regex.Replace(name.ToLower(), @"[^\w\s]", "");
                 var desc = m.Desc;
                 var descl = Regex.Replace(desc.ToLower(), @"[^\w\s]", "");
-                var slug = m.Slug;
+                var slug = m.Id;
 
                 var score = 0;
                 foreach (var kw in keywords)

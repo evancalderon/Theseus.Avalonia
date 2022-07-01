@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theseus.Avalonia", "Theseus.Avalonia\Theseus.Avalonia.csproj", "{8D67A298-16C8-4EF0-9DAC-916559BCCB3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIWriter", "APIWriter\APIWriter.csproj", "{994D28ED-9C0F-477B-91CD-5AC8A2B6D250}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{8D67A298-16C8-4EF0-9DAC-916559BCCB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D67A298-16C8-4EF0-9DAC-916559BCCB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D67A298-16C8-4EF0-9DAC-916559BCCB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{994D28ED-9C0F-477B-91CD-5AC8A2B6D250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{994D28ED-9C0F-477B-91CD-5AC8A2B6D250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{994D28ED-9C0F-477B-91CD-5AC8A2B6D250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{994D28ED-9C0F-477B-91CD-5AC8A2B6D250}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

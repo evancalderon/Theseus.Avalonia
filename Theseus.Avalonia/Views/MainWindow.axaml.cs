@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
@@ -8,6 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.ReactiveUI;
+using Avalonia.Threading;
 using Avalonia.Utilities;
 using ReactiveUI;
 using Theseus.Avalonia.ViewModels;
@@ -21,7 +23,9 @@ namespace Theseus.Avalonia.Views
         public MainWindow()
         {
             InitializeComponent();
-            this.WhenActivated(_ => { });
+            this.WhenActivated(_ =>
+            {
+            });
 
             Opened += delegate
             {
@@ -35,6 +39,11 @@ namespace Theseus.Avalonia.Views
                 SearchBorder.Height = 0;
             };
 
+            Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                await ViewModel!.LoadOnline();
+            });
+
 #if DEBUG
             this.AttachDevTools();
 #endif
@@ -44,7 +53,6 @@ namespace Theseus.Avalonia.Views
         {
             if (e.Property.Name == "Text")
             {
-                Console.WriteLine();
                 ViewModel?.DoSearch(SearchBox.Text);
             }
         }
@@ -59,13 +67,7 @@ namespace Theseus.Avalonia.Views
 
         private void ShowRealSearch(object? sender, GotFocusEventArgs e)
         {
-            //SearchOverlay.IsVisible = true;
             SearchBox.Focus();
-        }
-
-        private void HideRealSearch(object? sender, RoutedEventArgs e)
-        {
-            //SearchOverlay.IsVisible = false;
         }
     }
 }
