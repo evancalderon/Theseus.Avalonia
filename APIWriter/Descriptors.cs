@@ -1,18 +1,17 @@
 namespace APIWriter;
 
-public record Property(
-    string Name,
+public record TypeDescription(
     string Type,
     bool Nullable,
-    bool Array);
+    int ArrayDepth);
 
-public record Descriptor(
-    string Name,
-    List<Property> Properties);
+public record Description(
+    Dictionary<string, TypeDescription> Properties);
 
-public record Enumerator(
-    string Name,
+public record Enumeration(
     List<string> Values);
 
-public record Method;
+public record Method(
+    string method,
+    Dictionary<string, TypeDescription> Parameters);
     
