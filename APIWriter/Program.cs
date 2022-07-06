@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using APIWriter;
 using Pluralize.NET.Core;
 using YamlDotNet.Core;
@@ -45,12 +46,22 @@ foreach (var schema in schemas)
 
 foreach (var path in paths)
 {
+    var counter = 0;
+    var key = Regex.Replace(
+        (string) path.Key,
+        @"{(.*?)}",
+        _ => $"{{{counter++}}}");
     foreach (var method in path.Value)
     {
+        if (method.Value.ContainsKey("security"))
+        {
+            continue;
+        }
+        
         var name = method.Value["operationId"];
         names.Push(Camelize(name));
 
-        var parameters = new Dictionary<string, TypeDescription>();
+        var parameters = new Dictionary<string, MethodParameter>();
         if (method.Value.ContainsKey("parameters"))
         {
             foreach (var param in method.Value["parameters"])
@@ -59,12 +70,22 @@ foreach (var path in paths)
                 var paramName = param["name"];
                 var schema = param["schema"];
 
+                var typeDesc = CreateTypeDescription(paramName, schema);
                 parameters[Camelize(paramName, false)] =
-                    CreateTypeDescription(paramName, schema);
+                    new MethodParameter(Camelize(inType), typeDesc);
             }
         }
 
-        methods[name] = new Method(GetName(), parameters);
+        if (method.Value.ContainsKey("requestBody"))
+        {
+            Dictionary<dynamic, dynamic> requestBody = method.Value["requestBody"]["content"];
+            var (contentType, content) = requestBody.First();
+
+            var typeDesc = CreateTypeDescription("RequestBody", content["schema"]);
+            parameters["requestBody"] = new MethodParameter("RequestBody", typeDesc);
+        }
+
+        methods[GetName()] = new Method(method.Key, key, parameters);
         names.Pop();
     }
 }
@@ -81,14 +102,32 @@ output.AppendLine(@"
 using System;
 using boolean = System.Boolean;
 using integer = System.Int32;
-
 namespace Theseus.Avalonia;
+[AttributeUsage(AttributeTargets.Parameter)]
+public class PathAttribute : Attribute
+{
+}
+[AttributeUsage(AttributeTargets.Parameter)]
+public class QueryAttribute : Attribute
+{
+}
+[AttributeUsage(AttributeTargets.Parameter)]
+public class RequestBodyAttribute : Attribute
+{
+}
 ".Trim());
 
 foreach (var (name, enume) in enumerations)
 {
-    output.Append($"public enum {name}\n{{\n\t");
-    output.AppendLine(string.Join(",\n\t", enume.Values));
+    output.AppendLine($"public class {name}\n{{");
+    output.AppendLine("\tpublic string Name;");
+    output.AppendLine($"\tprivate {name}(string name)\n\t{{\n\t\tName = name;\n\t}}");
+    output.AppendLine("\tpublic override string ToString()\n\t{\n\t\treturn Name;\n\t}");
+    output.AppendLine($"\tpublic static implicit operator string({name} value)\n\t{{\n\t\treturn value.Name;\n\t}}");
+    output.Append(enume.Values.Aggregate("",
+        (cur, value) =>
+            cur +
+            $"\tpublic static readonly {name} {value.Key} = new(\"{value.Value}\");\n"));
     output.AppendLine("}");
 }
 
@@ -98,18 +137,22 @@ foreach (var (name, desc) in descriptors)
     output.Append(
         desc.Properties.Aggregate("",
             (cur, prop) =>
-                cur +
-                $"\t{prop.Value.Type}" +
-                string.Concat(Enumerable.Repeat("[]", prop.Value.ArrayDepth)) +
-                (prop.Value.Nullable ? "?" : "") +
-                $" {prop.Key};\n"));
+                prop switch
+                {
+                    var (pName, type) =>
+                        cur +
+                        $"\t{type.TypeName}" +
+                        string.Concat(Enumerable.Repeat("[]", type.ArrayDepth)) +
+                        (type.Nullable ? "?" : "") +
+                        $" {pName};\n"
+                }));
     output.AppendLine("}");
 }
 
 output.AppendLine(@"
 public class ModrinthClient
 {
-    System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
+    private System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
     public ModrinthClient()
     {
         client.DefaultRequestHeaders.UserAgent.Add(
@@ -124,20 +167,24 @@ foreach (var (name, method) in methods)
     output.Append(
         string.Join(", ",
             method.Parameters.Select(
-                p =>
-                    $"{p.Value.Type}" +
-                    $"{string.Concat(Enumerable.Repeat("[]", p.Value.ArrayDepth))}" +
-                    $"{(p.Value.Nullable ? "?" : "")}" +
-                    $" {p.Key}")));
+                _ => _ switch
+                {
+                    var (pName, param) =>
+                        $"[{param.Kind}]" +
+                        $" {param.Type.TypeName}" +
+                        $"{string.Concat(Enumerable.Repeat("[]", param.Type.ArrayDepth))}" +
+                        $"{(param.Type.Nullable || param.Kind == "Query" ? "?" : "")}" +
+                        $" {pName}"
+                })));
     output.AppendLine(")\n\t{");
-    
+
     // TODO
     output.AppendLine("\t\tthrow new NotImplementedException();");
-    
+
     output.AppendLine("\t}");
 }
 
-output.Append("}");
+output.Append('}');
 
 File.WriteAllText("Modrinth.cs", output.ToString());
 
@@ -160,6 +207,12 @@ string Camelize(string name, bool capitalizeFirstWord = true)
                 continue;
         }
 
+        if (!char.IsLetterOrDigit(character))
+        {
+            capitalize = true;
+            continue;
+        }
+
         if (capitalize)
         {
             result += char.ToUpper(character);
@@ -167,7 +220,7 @@ string Camelize(string name, bool capitalizeFirstWord = true)
         }
         else
         {
-            result += char.ToLower(character);
+            result += character;
         }
     }
 
@@ -199,10 +252,10 @@ TypeDescription CreateTypeDescription(string name, dynamic obj)
     bool hasType = obj.ContainsKey("type");
     if (hasType && obj["type"] == "string" && obj.ContainsKey("enum"))
     {
-        var values = new List<string>();
+        var values = new Dictionary<string, string>();
         foreach (var value in obj["enum"])
         {
-            values.Add(Camelize(value));
+            values.Add(Camelize(value), value);
         }
 
         enumerations[type] = new Enumeration(values);

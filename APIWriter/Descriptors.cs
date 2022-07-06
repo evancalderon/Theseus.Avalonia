@@ -1,7 +1,7 @@
 namespace APIWriter;
 
 public record TypeDescription(
-    string Type,
+    string TypeName,
     bool Nullable,
     int ArrayDepth);
 
@@ -9,9 +9,13 @@ public record Description(
     Dictionary<string, TypeDescription> Properties);
 
 public record Enumeration(
-    List<string> Values);
+    Dictionary<string, string> Values);
+
+public record MethodParameter(
+    string Kind,
+    TypeDescription Type);
 
 public record Method(
-    string method,
-    Dictionary<string, TypeDescription> Parameters);
-    
+    string Kind,
+    string Endpoint,
+    Dictionary<string, MethodParameter> Parameters);
